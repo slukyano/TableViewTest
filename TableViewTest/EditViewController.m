@@ -72,6 +72,8 @@
         [TableViewDataSingleton replaceObjectAtIndex:rowCurrentCell withObject:editField.text];
     else
         [TableViewDataSingleton removeObjectAtIndex:rowCurrentCell];
+    
+    [[TableViewDataSingleton instance] saveDataToXML];
 }
 
 @end

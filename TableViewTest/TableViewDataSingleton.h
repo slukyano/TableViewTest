@@ -23,5 +23,6 @@
 + (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2;
 + (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject;
 - (void) loader:(UserDataLoader *)loader didEndLoadingDataArray:(NSMutableArray *)newDataArray;
+- (void) saveDataToXML;
 
 @end

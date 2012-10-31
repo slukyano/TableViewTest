@@ -25,10 +25,16 @@ NSString * const userDataXMLPath = @"/Library/userdata.xml";
 // Указатель на экземпляр класса
 static TableViewDataSingleton *_instance = nil;
 
-+ (TableViewDataSingleton *) instance {
+// Возвращаем указатель на экземпляр класса; если не создан - инициализируем и загружаем данные из XML; в случае ошибки парсинга - заполняем значениями по умолчанию
++ (TableViewDataSingleton *) instance
+{
     @synchronized(self) {
         if (_instance == nil) {
             _instance = [[TableViewDataSingleton alloc] init];
+            
+            if (![_instance loadDataFromXML]) {
+                _instance.dataArray = [NSMutableArray arrayWithObjects:@"object1", @"object2", @"object3", nil];
+            }
         }
     }
     
@@ -66,6 +72,14 @@ static TableViewDataSingleton *_instance = nil;
     [[self instance].dataArray replaceObjectAtIndex:index withObject:anObject];
 }
 
+// Сохраняем данные в XML
+- (void) dealloc
+{
+    [self saveDataToXML];
+    
+    [super dealloc];
+}
+
 // Генерируем XML и сохраняем в файл
 - (void) saveDataToXML
 {
@@ -80,28 +94,6 @@ static TableViewDataSingleton *_instance = nil;
     
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm createFileAtPath:userDataXMLPath contents:[xmlString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
-}
-
-// При инициализации загружаем массив из XML-файла; в случае ошибки, инициализируем массив со значениями по умолчанию
-- (id)init
-{
-    self = [super init];
-    if (self)
-    {
-        if (![self loadDataFromXML])
-        {
-            self.dataArray = [NSMutableArray arrayWithObjects:@"object1", @"object2", @"object3", nil];
-        }
-    }
-    return self;
-}
-
-// Сохраняем данные в XML
-- (void) dealloc
-{
-    [self saveDataToXML];
-    
-    [super dealloc];
 }
 
 // Запускаем парсер и получаем данные
