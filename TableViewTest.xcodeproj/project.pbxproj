@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		C391B6B91638709B00AC9C59 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C391B6B71638709B00AC9C59 /* EditViewController.m */; };
 		C391B6BA1638709B00AC9C59 /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C391B6B81638709B00AC9C59 /* EditViewController.xib */; };
+		C3B7EA061641BBF900C78D64 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B7EA051641BBF900C78D64 /* GDataXMLNode.m */; };
+		C3B7EA081641BC4600C78D64 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B7EA071641BC4600C78D64 /* libxml2.dylib */; };
+		C3C5FE3316424C5F003C7FC0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C3C5FE3216424C5F003C7FC0 /* Settings.bundle */; };
 		C3D565FA1638298A00389750 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D565F91638298A00389750 /* UIKit.framework */; };
 		C3D565FC1638298A00389750 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D565FB1638298A00389750 /* Foundation.framework */; };
 		C3D565FE1638298A00389750 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D565FD1638298A00389750 /* CoreGraphics.framework */; };
@@ -29,6 +32,10 @@
 		C391B6B61638709B00AC9C59 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
 		C391B6B71638709B00AC9C59 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 		C391B6B81638709B00AC9C59 /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
+		C3B7EA041641BBF900C78D64 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GDataXMLNode.h; path = ../GDataXMLNode.h; sourceTree = "<group>"; };
+		C3B7EA051641BBF900C78D64 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GDataXMLNode.m; path = ../GDataXMLNode.m; sourceTree = "<group>"; };
+		C3B7EA071641BC4600C78D64 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		C3C5FE3216424C5F003C7FC0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C3D565F51638298A00389750 /* TableViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TableViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3D565F91638298A00389750 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C3D565FB1638298A00389750 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -57,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3B7EA081641BC4600C78D64 /* libxml2.dylib in Frameworks */,
 				C3D565FA1638298A00389750 /* UIKit.framework in Frameworks */,
 				C3D565FC1638298A00389750 /* Foundation.framework in Frameworks */,
 				C3D565FE1638298A00389750 /* CoreGraphics.framework in Frameworks */,
@@ -69,6 +77,7 @@
 		C3D565EA1638298A00389750 = {
 			isa = PBXGroup;
 			children = (
+				C3C5FE3216424C5F003C7FC0 /* Settings.bundle */,
 				C3D565FF1638298A00389750 /* TableViewTest */,
 				C3D565F81638298A00389750 /* Frameworks */,
 				C3D565F61638298A00389750 /* Products */,
@@ -86,6 +95,7 @@
 		C3D565F81638298A00389750 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C3B7EA071641BC4600C78D64 /* libxml2.dylib */,
 				C3D565F91638298A00389750 /* UIKit.framework */,
 				C3D565FB1638298A00389750 /* Foundation.framework */,
 				C3D565FD1638298A00389750 /* CoreGraphics.framework */,
@@ -121,6 +131,7 @@
 		CE99785C163F3EF200359B98 /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				C3B7EA041641BBF900C78D64 /* GDataXMLNode.h */,
 				C3D566081638298A00389750 /* AppDelegate.h */,
 				C391B6B61638709B00AC9C59 /* EditViewController.h */,
 				C3D5661816382A1E00389750 /* TableViewController.h */,
@@ -133,6 +144,7 @@
 		CE99785E163F3F0500359B98 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				C3B7EA051641BBF900C78D64 /* GDataXMLNode.m */,
 				C3D566091638298A00389750 /* AppDelegate.m */,
 				C391B6B71638709B00AC9C59 /* EditViewController.m */,
 				C3D5661916382A1E00389750 /* TableViewController.m */,
@@ -210,6 +222,7 @@
 				C3D56617163829B800389750 /* Window.xib in Resources */,
 				C3D5661C16382A1E00389750 /* TableViewController.xib in Resources */,
 				C391B6BA1638709B00AC9C59 /* EditViewController.xib in Resources */,
+				C3C5FE3316424C5F003C7FC0 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +239,7 @@
 				C391B6B91638709B00AC9C59 /* EditViewController.m in Sources */,
 				CEFF2785163B10B800B6C941 /* TableViewDataSingleton.m in Sources */,
 				CE99787316408B9100359B98 /* UserDataLoader.m in Sources */,
+				C3B7EA061641BBF900C78D64 /* GDataXMLNode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,7 +312,9 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TableViewTest/TableViewTest-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "TableViewTest/TableViewTest-Info.plist";
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -309,7 +325,9 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TableViewTest/TableViewTest-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = "TableViewTest/TableViewTest-Info.plist";
+				OTHER_LDFLAGS = "-lxml2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

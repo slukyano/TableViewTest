@@ -8,8 +8,9 @@
 
 #import "TableViewDataSingleton.h"
 #import "UserDataLoader.h"
+#import "GDataXMLNode.h"
 
-NSString * const userDataXMLPath = @"/Library/userdata.xml";
+//NSString * const userDataXMLPath = @"/Documents/userdata.xml";
 
 @interface TableViewDataSingleton ()
 
@@ -32,7 +33,7 @@ static TableViewDataSingleton *_instance = nil;
         if (_instance == nil) {
             _instance = [[TableViewDataSingleton alloc] init];
             
-            if (![_instance loadDataFromXML]) {
+            if (![_instance loadData]) {
                 _instance.dataArray = [NSMutableArray arrayWithObjects:@"object1", @"object2", @"object3", nil];
             }
         }
@@ -55,29 +56,49 @@ static TableViewDataSingleton *_instance = nil;
 + (void) addObject:(id)anObject
 {
     [[self instance].dataArray addObject:anObject];
+    [[self instance] saveData];
 }
 
 + (void) removeObjectAtIndex:(NSUInteger)index
 {
     [[self instance].dataArray removeObjectAtIndex:index];
+    [[self instance] saveData];
 }
 
 + (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2
 {
     [[self instance].dataArray exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
+    [[self instance] saveData];
 }
 
 + (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject
 {
     [[self instance].dataArray replaceObjectAtIndex:index withObject:anObject];
+    [[self instance] saveData];
 }
 
-// Сохраняем данные в XML
-- (void) dealloc
-{
-    [self saveDataToXML];
+// Загружаем в зависимости от настроек: "parse_preference" - "YES" означает предпочтение DOM
+-(BOOL)loadData {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+    if ([defaults boolForKey:@"parse_preference"])
+        return [self loadGDataFromXML];
+    else {
+        NSLog(@"NSXML");
+        return [self loadDataFromXML];
+    }
+}
+
+// Сохраняем в зависисмости от настроек
+-(void) saveData {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
-    [super dealloc];
+    if ([defaults boolForKey:@"parse_preference"])
+        [self saveGDataToXML];
+    else {
+        NSLog(@"NSXML");
+        [self saveDataToXML];
+    }
 }
 
 // Генерируем XML и сохраняем в файл
@@ -93,14 +114,14 @@ static TableViewDataSingleton *_instance = nil;
     xmlString = [xmlString stringByAppendingString:@"</table>"];
     
     NSFileManager *fm = [NSFileManager defaultManager];
-    [fm createFileAtPath:userDataXMLPath contents:[xmlString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
+    [fm createFileAtPath:[TableViewDataSingleton dataFilePath:YES] contents:[xmlString dataUsingEncoding:NSUTF8StringEncoding] attributes:nil];
 }
 
 // Запускаем парсер и получаем данные
 - (BOOL) loadDataFromXML
 {
     NSFileManager *fm = [NSFileManager defaultManager];
-    NSData *userDataXML = [fm contentsAtPath:userDataXMLPath];
+    NSData *userDataXML = [fm contentsAtPath:[TableViewDataSingleton dataFilePath:NO]];
     
     NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:userDataXML];
     UserDataLoader *dataLoader = [[UserDataLoader alloc] init];
@@ -118,6 +139,72 @@ static TableViewDataSingleton *_instance = nil;
 - (void) loader:(UserDataLoader *)loader didEndLoadingDataArray:(NSMutableArray *)newDataArray
 {
     self.dataArray = [NSMutableArray arrayWithArray:newDataArray];
+}
+
+// Задаем путь файла
++ (NSString *)dataFilePath:(BOOL)forSave {
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *documentsPath = [documentsDirectory
+                               stringByAppendingPathComponent:@"userdata.xml"];
+    if (forSave ||
+        [[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+        return documentsPath;
+    } else {
+        return [[NSBundle mainBundle] pathForResource:@"userdata" ofType:@"xml"];
+    }
+    
+}
+
+// Загружаем из xml с помощью GData
+- (BOOL)loadGDataFromXML {
+    self.dataArray = [[NSMutableArray alloc] init];
+    NSString *filePath = [TableViewDataSingleton dataFilePath:FALSE];
+    NSData *xmlData = [[NSMutableData alloc] initWithContentsOfFile:filePath];
+    NSError *error;
+    GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:xmlData
+                                                           options:0 error:&error];
+    if (doc == nil) {return false; }
+    
+    NSArray *cells = [doc.rootElement elementsForName:@"cell"];
+    for (GDataXMLElement *cell in cells) {
+            NSString *title = [[cell attributeForName:@"title"]  stringValue];
+        [self.dataArray addObject:title];
+    }
+    [doc release];
+    [xmlData release];
+    return true;
+}
+
+// Сохраняем в xml с помощью GData
+- (void)saveGDataToXML{
+    
+    //задаем структуру  xml
+    GDataXMLElement * tableElement = [GDataXMLNode elementWithName:@"table"];
+    
+    for(int i=0; i<self.dataArray.count; i++) {
+        
+        GDataXMLElement * cellElement =
+        [GDataXMLNode elementWithName:@"cell"];
+        
+        GDataXMLNode *titleElement = [GDataXMLNode attributeWithName:@"title" stringValue:[self.dataArray objectAtIndex:i]];
+        
+        [cellElement addAttribute:titleElement];
+        [tableElement addChild:cellElement];
+    }
+    
+    //непосредственно сохраняем
+    GDataXMLDocument *document = [[[GDataXMLDocument alloc]
+                                   initWithRootElement:tableElement] autorelease];
+    NSData *xmlData = document.XMLData;
+    
+    NSString *filePath = [TableViewDataSingleton dataFilePath:TRUE];
+    
+    NSLog(@"Saving xml data to %@...", filePath);
+    [xmlData writeToFile:filePath atomically:YES];
+    
 }
 
 @end
