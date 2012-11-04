@@ -10,10 +10,9 @@
 #import "UserDataLoader.h"
 #import "GDataXMLNode.h"
 
-//NSString * const userDataXMLPath = @"/Documents/userdata.xml";
-
 @interface TableViewDataSingleton ()
 
++ (NSString *) dataFilePath:(BOOL)forSave;
 - (void) saveDataToXML;
 - (BOOL) loadDataFromXML;
 
@@ -27,8 +26,7 @@
 static TableViewDataSingleton *_instance = nil;
 
 // Возвращаем указатель на экземпляр класса; если не создан - инициализируем и загружаем данные из XML; в случае ошибки парсинга - заполняем значениями по умолчанию
-+ (TableViewDataSingleton *) instance
-{
++ (TableViewDataSingleton *) instance {
     @synchronized(self) {
         if (_instance == nil) {
             _instance = [[TableViewDataSingleton alloc] init];
@@ -43,38 +41,32 @@ static TableViewDataSingleton *_instance = nil;
 }
 
 // Дублируем необходимые методы класса NSMutableArray
-+ (NSUInteger) count
-{
-    return [[self instance].dataArray count];
+- (NSUInteger) count {
+    return [dataArray count];
 }
 
-+ (id) objectAtIndex:(NSUInteger)index
-{
-    return [[self instance].dataArray objectAtIndex:index];
+- (id) objectAtIndex:(NSUInteger)index {
+    return [dataArray objectAtIndex:index];
 }
 
-+ (void) addObject:(id)anObject
-{
-    [[self instance].dataArray addObject:anObject];
-    [[self instance] saveData];
+- (void) addObject:(id)anObject {
+    [dataArray addObject:anObject];
+    [self saveData];
 }
 
-+ (void) removeObjectAtIndex:(NSUInteger)index
-{
-    [[self instance].dataArray removeObjectAtIndex:index];
-    [[self instance] saveData];
+- (void) removeObjectAtIndex:(NSUInteger)index {
+    [dataArray removeObjectAtIndex:index];
+    [self saveData];
 }
 
-+ (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2
-{
-    [[self instance].dataArray exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
-    [[self instance] saveData];
+- (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2 {
+    [dataArray exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
+    [self saveData];
 }
 
-+ (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject
-{
-    [[self instance].dataArray replaceObjectAtIndex:index withObject:anObject];
-    [[self instance] saveData];
+- (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
+    [dataArray replaceObjectAtIndex:index withObject:anObject];
+    [self saveData];
 }
 
 // Загружаем в зависимости от настроек: "parse_preference" - "YES" означает предпочтение DOM
@@ -84,7 +76,7 @@ static TableViewDataSingleton *_instance = nil;
     if ([defaults boolForKey:@"parse_preference"])
         return [self loadGDataFromXML];
     else {
-        NSLog(@"NSXML");
+        //NSLog(@"NSXML");
         return [self loadDataFromXML];
     }
 }
@@ -96,14 +88,13 @@ static TableViewDataSingleton *_instance = nil;
     if ([defaults boolForKey:@"parse_preference"])
         [self saveGDataToXML];
     else {
-        NSLog(@"NSXML");
+        //NSLog(@"NSXML");
         [self saveDataToXML];
     }
 }
 
 // Генерируем XML и сохраняем в файл
-- (void) saveDataToXML
-{
+- (void) saveDataToXML {
     NSString *xmlString = @"<?xml version=\"1.0\" encoding=\"UTF8\"?>\n<table>\n";
     
     for (int i = 0; i < [_instance.dataArray count]; i++)
@@ -118,8 +109,7 @@ static TableViewDataSingleton *_instance = nil;
 }
 
 // Запускаем парсер и получаем данные
-- (BOOL) loadDataFromXML
-{
+- (BOOL) loadDataFromXML {
     NSFileManager *fm = [NSFileManager defaultManager];
     NSData *userDataXML = [fm contentsAtPath:[TableViewDataSingleton dataFilePath:NO]];
     
@@ -136,8 +126,7 @@ static TableViewDataSingleton *_instance = nil;
 }
 
 // Получив сообщение от загрузчика данных, сохраняем массив
-- (void) loader:(UserDataLoader *)loader didEndLoadingDataArray:(NSMutableArray *)newDataArray
-{
+- (void) loader:(UserDataLoader *)loader didEndLoadingDataArray:(NSMutableArray *)newDataArray {
     self.dataArray = [NSMutableArray arrayWithArray:newDataArray];
 }
 
@@ -166,7 +155,8 @@ static TableViewDataSingleton *_instance = nil;
     NSError *error;
     GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:xmlData
                                                            options:0 error:&error];
-    if (doc == nil) {return false; }
+    if (doc == nil)
+        return false;
     
     NSArray *cells = [doc.rootElement elementsForName:@"cell"];
     for (GDataXMLElement *cell in cells) {
@@ -175,11 +165,12 @@ static TableViewDataSingleton *_instance = nil;
     }
     [doc release];
     [xmlData release];
+    
     return true;
 }
 
 // Сохраняем в xml с помощью GData
-- (void)saveGDataToXML{
+- (void)saveGDataToXML {
     
     //задаем структуру  xml
     GDataXMLElement * tableElement = [GDataXMLNode elementWithName:@"table"];

@@ -38,7 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    editField.text = [TableViewDataSingleton objectAtIndex:rowCurrentCell];
+    editField.text = [[TableViewDataSingleton instance] objectAtIndex:rowCurrentCell];
     
     switch (editorMode) {
         case EditViewControllerModeAdd:
@@ -69,11 +69,9 @@
 //Сохраняем результаты редактирования при закрытии данного View
 - (void) viewDidDisappear:(BOOL)animated {
     if (![editField.text isEqualToString:@""])
-        [TableViewDataSingleton replaceObjectAtIndex:rowCurrentCell withObject:editField.text];
+        [[TableViewDataSingleton instance] replaceObjectAtIndex:rowCurrentCell withObject:editField.text];
     else
-        [TableViewDataSingleton removeObjectAtIndex:rowCurrentCell];
-    
-    [[TableViewDataSingleton instance] saveDataToXML];
+        [[TableViewDataSingleton instance] removeObjectAtIndex:rowCurrentCell];
 }
 
 @end

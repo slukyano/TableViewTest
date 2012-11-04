@@ -106,10 +106,19 @@
 		C3D565FF1638298A00389750 /* TableViewTest */ = {
 			isa = PBXGroup;
 			children = (
-				CE99785C163F3EF200359B98 /* Headers */,
-				CE99785E163F3F0500359B98 /* Sources */,
-				CE99785F163F3F1000359B98 /* Xibs */,
+				C3D566081638298A00389750 /* AppDelegate.h */,
+				C3D566091638298A00389750 /* AppDelegate.m */,
+				C391B6B61638709B00AC9C59 /* EditViewController.h */,
+				C391B6B71638709B00AC9C59 /* EditViewController.m */,
+				C3D5661816382A1E00389750 /* TableViewController.h */,
+				C3D5661916382A1E00389750 /* TableViewController.m */,
+				CEFF2783163B10B800B6C941 /* TableViewDataSingleton.h */,
+				CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */,
+				CE99787116408B9100359B98 /* UserDataLoader.h */,
+				CE99787216408B9100359B98 /* UserDataLoader.m */,
+				CE74A02A1646C725004EE375 /* GDataXMLNode */,
 				C3D566001638298A00389750 /* Supporting Files */,
+				CE99785F163F3F1000359B98 /* Xibs */,
 			);
 			path = TableViewTest;
 			sourceTree = "<group>";
@@ -128,30 +137,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		CE99785C163F3EF200359B98 /* Headers */ = {
+		CE74A02A1646C725004EE375 /* GDataXMLNode */ = {
 			isa = PBXGroup;
 			children = (
 				C3B7EA041641BBF900C78D64 /* GDataXMLNode.h */,
-				C3D566081638298A00389750 /* AppDelegate.h */,
-				C391B6B61638709B00AC9C59 /* EditViewController.h */,
-				C3D5661816382A1E00389750 /* TableViewController.h */,
-				CEFF2783163B10B800B6C941 /* TableViewDataSingleton.h */,
-				CE99787116408B9100359B98 /* UserDataLoader.h */,
-			);
-			name = Headers;
-			sourceTree = "<group>";
-		};
-		CE99785E163F3F0500359B98 /* Sources */ = {
-			isa = PBXGroup;
-			children = (
 				C3B7EA051641BBF900C78D64 /* GDataXMLNode.m */,
-				C3D566091638298A00389750 /* AppDelegate.m */,
-				C391B6B71638709B00AC9C59 /* EditViewController.m */,
-				C3D5661916382A1E00389750 /* TableViewController.m */,
-				CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */,
-				CE99787216408B9100359B98 /* UserDataLoader.m */,
 			);
-			name = Sources;
+			name = GDataXMLNode;
 			sourceTree = "<group>";
 		};
 		CE99785F163F3F1000359B98 /* Xibs */ = {

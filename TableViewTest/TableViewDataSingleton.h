@@ -16,13 +16,12 @@
 
 // Возвращает указатель на экземпляр
 + (TableViewDataSingleton *) instance;
-+ (NSUInteger) count;
-+ (id) objectAtIndex:(NSUInteger)index;
-+ (void) addObject:(id)anObject;
-+ (void) removeObjectAtIndex:(NSUInteger)index;
-+ (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2;
-+ (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject;
+- (NSUInteger) count;
+- (id) objectAtIndex:(NSUInteger)index;
+- (void) addObject:(id)anObject;
+- (void) removeObjectAtIndex:(NSUInteger)index;
+- (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2;
+- (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject;
 - (void) loader:(UserDataLoader *)loader didEndLoadingDataArray:(NSMutableArray *)newDataArray;
-- (void) saveDataToXML;
 
 @end

@@ -48,14 +48,13 @@
 // Количество секций в таблице
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
     return 1;
 }
 
 //Количество ячеек в таблице
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [TableViewDataSingleton count];
+    return [[TableViewDataSingleton instance] count];
 }
 
 //Заполняем таблицу
@@ -68,17 +67,17 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = [TableViewDataSingleton objectAtIndex:indexPath.row];
+    cell.textLabel.text = [[TableViewDataSingleton instance] objectAtIndex:indexPath.row];
     return cell;
 
 }
 
 //Добавление ячейки
 - (void) adding {
-    [TableViewDataSingleton addObject:@""];
+    [[TableViewDataSingleton instance] addObject:@""];
     
     EditViewController *editlViewController = [[EditViewController alloc]
-                                               initWithNibName:@"EditViewController" bundle:nil rowToEdit:[TableViewDataSingleton count]-1 editorMode:EditViewControllerModeAdd];
+                                               initWithNibName:@"EditViewController" bundle:nil rowToEdit:[[TableViewDataSingleton instance] count]-1 editorMode:EditViewControllerModeAdd];
     [self.navigationController pushViewController:editlViewController animated:YES];
     [editlViewController release];
 
@@ -98,7 +97,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [TableViewDataSingleton removeObjectAtIndex:indexPath.row];
+        [[TableViewDataSingleton instance] removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath]
                          withRowAnimation:UITableViewRowAnimationFade];
     }
@@ -107,7 +106,7 @@
 //Перемещение ячеек
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    [TableViewDataSingleton exchangeObjectAtIndex:sourceIndexPath.row withObjectAtIndex:destinationIndexPath.row];
+    [[TableViewDataSingleton  instance] exchangeObjectAtIndex:sourceIndexPath.row withObjectAtIndex:destinationIndexPath.row];
 }
 
 //При выборе ячейки переходим к ее редактированию
