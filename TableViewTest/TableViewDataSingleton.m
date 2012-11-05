@@ -9,6 +9,7 @@
 #import "TableViewDataSingleton.h"
 #import "UserDataLoader.h"
 #import "GDataXMLNode.h"
+#import "CellData.h"
 
 @interface TableViewDataSingleton ()
 
@@ -23,21 +24,44 @@
 @synthesize dataArray;
 
 // Указатель на экземпляр класса
-static TableViewDataSingleton *_instance = nil;
+static TableViewDataSingleton *_instance;
 
 // Возвращаем указатель на экземпляр класса; если не создан - инициализируем и загружаем данные из XML; в случае ошибки парсинга - заполняем значениями по умолчанию
 + (TableViewDataSingleton *) instance {
-    @synchronized(self) {
-        if (_instance == nil) {
+    @synchronized(self)
+    {
+        if (_instance == nil)
+        {
             _instance = [[TableViewDataSingleton alloc] init];
             
-            if (![_instance loadData]) {
-                _instance.dataArray = [NSMutableArray arrayWithObjects:@"object1", @"object2", @"object3", nil];
-            }
+            //if (![_instance loadData]) {
+                NSDate *date = [NSDate date];
+                
+                CellData *cell = [[CellData alloc] initWithTitle:@"defaultcell" withDate:date withImage:nil];
+                _instance.dataArray = [NSMutableArray arrayWithObject:cell];
+                [cell release];
+            //}
         }
     }
     
     return _instance;
+}
+
+// Задаем путь файла
++ (NSString *)dataFilePath:(BOOL)forSave {
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *documentsPath = [documentsDirectory
+                               stringByAppendingPathComponent:@"userdata.xml"];
+    if (forSave ||
+        [[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+        return documentsPath;
+    } else {
+        return [[NSBundle mainBundle] pathForResource:@"userdata" ofType:@"xml"];
+    }
+    
 }
 
 // Дублируем необходимые методы класса NSMutableArray
@@ -74,7 +98,7 @@ static TableViewDataSingleton *_instance = nil;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if ([defaults boolForKey:@"parse_preference"])
-        return [self loadGDataFromXML];
+        return [self loadDataFromXML];
     else {
         //NSLog(@"NSXML");
         return [self loadDataFromXML];
@@ -86,7 +110,7 @@ static TableViewDataSingleton *_instance = nil;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if ([defaults boolForKey:@"parse_preference"])
-        [self saveGDataToXML];
+        [self saveDataToXML];
     else {
         //NSLog(@"NSXML");
         [self saveDataToXML];
@@ -99,7 +123,17 @@ static TableViewDataSingleton *_instance = nil;
     
     for (int i = 0; i < [_instance.dataArray count]; i++)
     {
-        xmlString = [xmlString stringByAppendingFormat:@"<cell title=\"%@\" />\n", [_instance.dataArray objectAtIndex:i]];
+        CellData *currentCell = [_instance.dataArray objectAtIndex:i];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+        [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
+        NSString *dateString = [dateFormatter stringFromDate:currentCell.date];
+        [dateFormatter release];
+        
+        xmlString = [xmlString stringByAppendingFormat:@"<cell title=\"%@\">\n", currentCell.title];
+        xmlString = [xmlString stringByAppendingFormat:@"<date>%@</date>\n", dateString];
+        xmlString = [xmlString stringByAppendingFormat:@"<image>%@</image>\n", currentCell.image.description];
+        xmlString = [xmlString stringByAppendingFormat:@"</cell>"];
     }
     
     xmlString = [xmlString stringByAppendingString:@"</table>"];
@@ -130,23 +164,6 @@ static TableViewDataSingleton *_instance = nil;
     self.dataArray = [NSMutableArray arrayWithArray:newDataArray];
 }
 
-// Задаем путь файла
-+ (NSString *)dataFilePath:(BOOL)forSave {
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-                                                         NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *documentsPath = [documentsDirectory
-                               stringByAppendingPathComponent:@"userdata.xml"];
-    if (forSave ||
-        [[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
-        return documentsPath;
-    } else {
-        return [[NSBundle mainBundle] pathForResource:@"userdata" ofType:@"xml"];
-    }
-    
-}
-
 // Загружаем из xml с помощью GData
 - (BOOL)loadGDataFromXML {
     self.dataArray = [[NSMutableArray alloc] init];
@@ -156,17 +173,21 @@ static TableViewDataSingleton *_instance = nil;
     GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:xmlData
                                                            options:0 error:&error];
     if (doc == nil)
-        return false;
+    {
+        [xmlData release];
+        return NO;
+    }
     
     NSArray *cells = [doc.rootElement elementsForName:@"cell"];
     for (GDataXMLElement *cell in cells) {
-            NSString *title = [[cell attributeForName:@"title"]  stringValue];
+        NSString *title = [[cell attributeForName:@"title"]  stringValue];
         [self.dataArray addObject:title];
     }
+    
     [doc release];
     [xmlData release];
     
-    return true;
+    return YES;
 }
 
 // Сохраняем в xml с помощью GData

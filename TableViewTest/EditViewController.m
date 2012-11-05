@@ -9,6 +9,7 @@
 #import "EditViewController.h"
 #import "TableViewController.h"
 #import "TableViewDataSingleton.h"
+#import "CellData.h"
 
 @interface EditViewController ()
 {
@@ -26,7 +27,6 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if (self) {
-        // Custom initialization
         rowCurrentCell = row;
         editorMode = mode;
     }
@@ -35,10 +35,9 @@
 }
 
 // Помещаем в текстовое поле значение текущей ячейки и устанавливаем заголовок
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    editField.text = [[TableViewDataSingleton instance] objectAtIndex:rowCurrentCell];
+    editField.text = [[[TableViewDataSingleton instance] objectAtIndex:rowCurrentCell] title];
     
     switch (editorMode) {
         case EditViewControllerModeAdd:
@@ -52,15 +51,13 @@
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 // Освобождаем ресурсы
-- (void)dealloc
-{
+- (void)dealloc {
     [editField release];
     
     [super dealloc];
@@ -68,8 +65,11 @@
 
 //Сохраняем результаты редактирования при закрытии данного View
 - (void) viewDidDisappear:(BOOL)animated {
-    if (![editField.text isEqualToString:@""])
-        [[TableViewDataSingleton instance] replaceObjectAtIndex:rowCurrentCell withObject:editField.text];
+    if (![editField.text isEqualToString:@""]) {
+        CellData *cellData = [[CellData alloc] initWithTitle:editField.text withDate:nil withImage:nil];
+        [[TableViewDataSingleton instance] replaceObjectAtIndex:rowCurrentCell withObject:cellData];
+        [cellData release];
+    }
     else
         [[TableViewDataSingleton instance] removeObjectAtIndex:rowCurrentCell];
 }

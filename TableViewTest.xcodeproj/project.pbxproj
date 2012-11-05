@@ -24,6 +24,7 @@
 		C3D56617163829B800389750 /* Window.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D56616163829B800389750 /* Window.xib */; };
 		C3D5661B16382A1E00389750 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D5661916382A1E00389750 /* TableViewController.m */; };
 		C3D5661C16382A1E00389750 /* TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D5661A16382A1E00389750 /* TableViewController.xib */; };
+		CE74A02D1646E3E8004EE375 /* CellData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE74A02C1646E3E8004EE375 /* CellData.m */; };
 		CE99787316408B9100359B98 /* UserDataLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = CE99787216408B9100359B98 /* UserDataLoader.m */; };
 		CEFF2785163B10B800B6C941 /* TableViewDataSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */; };
 /* End PBXBuildFile section */
@@ -53,6 +54,8 @@
 		C3D5661816382A1E00389750 /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
 		C3D5661916382A1E00389750 /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
 		C3D5661A16382A1E00389750 /* TableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewController.xib; sourceTree = "<group>"; };
+		CE74A02B1646E3E8004EE375 /* CellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellData.h; sourceTree = "<group>"; };
+		CE74A02C1646E3E8004EE375 /* CellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellData.m; sourceTree = "<group>"; };
 		CE99787116408B9100359B98 /* UserDataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataLoader.h; sourceTree = "<group>"; };
 		CE99787216408B9100359B98 /* UserDataLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataLoader.m; sourceTree = "<group>"; };
 		CEFF2783163B10B800B6C941 /* TableViewDataSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewDataSingleton.h; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 				CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */,
 				CE99787116408B9100359B98 /* UserDataLoader.h */,
 				CE99787216408B9100359B98 /* UserDataLoader.m */,
+				CE74A02B1646E3E8004EE375 /* CellData.h */,
+				CE74A02C1646E3E8004EE375 /* CellData.m */,
 				CE74A02A1646C725004EE375 /* GDataXMLNode */,
 				C3D566001638298A00389750 /* Supporting Files */,
 				CE99785F163F3F1000359B98 /* Xibs */,
@@ -232,6 +237,7 @@
 				CEFF2785163B10B800B6C941 /* TableViewDataSingleton.m in Sources */,
 				CE99787316408B9100359B98 /* UserDataLoader.m in Sources */,
 				C3B7EA061641BBF900C78D64 /* GDataXMLNode.m in Sources */,
+				CE74A02D1646E3E8004EE375 /* CellData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,6 +9,7 @@
 #import "TableViewController.h"
 #import "EditViewController.h"
 #import "TableViewDataSingleton.h"
+#import "CellData.h"
 
 @implementation TableViewController
 
@@ -67,14 +68,16 @@
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
     
-    cell.textLabel.text = [[TableViewDataSingleton instance] objectAtIndex:indexPath.row];
+    cell.textLabel.text = [[[TableViewDataSingleton instance] objectAtIndex:indexPath.row] title];
     return cell;
 
 }
 
 //Добавление ячейки
 - (void) adding {
-    [[TableViewDataSingleton instance] addObject:@""];
+    CellData *cellData = [[CellData alloc] initWithTitle:@"" withDate:nil withImage:nil];
+    [[TableViewDataSingleton instance] addObject:cellData];
+    [cellData release];
     
     EditViewController *editlViewController = [[EditViewController alloc]
                                                initWithNibName:@"EditViewController" bundle:nil rowToEdit:[[TableViewDataSingleton instance] count]-1 editorMode:EditViewControllerModeAdd];
