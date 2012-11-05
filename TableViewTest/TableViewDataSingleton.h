@@ -16,6 +16,8 @@
 
 // Возвращает указатель на экземпляр
 + (TableViewDataSingleton *) instance;
++ (NSString *) stringFromDate:(NSDate *)date;
++ (NSDate *) dateFromString:(NSString *)string;
 - (NSUInteger) count;
 - (id) objectAtIndex:(NSUInteger)index;
 - (void) addObject:(id)anObject;

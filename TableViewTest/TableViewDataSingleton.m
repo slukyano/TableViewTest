@@ -34,13 +34,15 @@ static TableViewDataSingleton *_instance;
         {
             _instance = [[TableViewDataSingleton alloc] init];
             
-            //if (![_instance loadData]) {
+            if (![_instance loadData])
+            {
                 NSDate *date = [NSDate date];
-                
+            
+                // !!! Изменить изображение
                 CellData *cell = [[CellData alloc] initWithTitle:@"defaultcell" withDate:date withImage:nil];
                 _instance.dataArray = [NSMutableArray arrayWithObject:cell];
                 [cell release];
-            //}
+            }
         }
     }
     
@@ -55,13 +57,31 @@ static TableViewDataSingleton *_instance;
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *documentsPath = [documentsDirectory
                                stringByAppendingPathComponent:@"userdata.xml"];
-    if (forSave ||
-        [[NSFileManager defaultManager] fileExistsAtPath:documentsPath]) {
+    if (forSave || [[NSFileManager defaultManager] fileExistsAtPath:documentsPath])
         return documentsPath;
-    } else {
+    else
         return [[NSBundle mainBundle] pathForResource:@"userdata" ofType:@"xml"];
-    }
     
+}
+
++ (NSString *) stringFromDate:(NSDate *)date {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
+    NSString *string = [dateFormatter stringFromDate:date];
+    [dateFormatter release];
+    
+    return string;
+}
+
++ (NSDate *) dateFromString:(NSString *)string {
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
+    NSDate *date = [dateFormatter dateFromString:string];
+    [dateFormatter release];
+    
+    return date;
 }
 
 // Дублируем необходимые методы класса NSMutableArray
@@ -98,7 +118,7 @@ static TableViewDataSingleton *_instance;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if ([defaults boolForKey:@"parse_preference"])
-        return [self loadDataFromXML];
+        return [self loadGDataFromXML];
     else {
         //NSLog(@"NSXML");
         return [self loadDataFromXML];
@@ -110,7 +130,7 @@ static TableViewDataSingleton *_instance;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     if ([defaults boolForKey:@"parse_preference"])
-        [self saveDataToXML];
+        [self saveGDataToXML];
     else {
         //NSLog(@"NSXML");
         [self saveDataToXML];
@@ -121,18 +141,16 @@ static TableViewDataSingleton *_instance;
 - (void) saveDataToXML {
     NSString *xmlString = @"<?xml version=\"1.0\" encoding=\"UTF8\"?>\n<table>\n";
     
-    for (int i = 0; i < [_instance.dataArray count]; i++)
-    {
+    for (int i = 0; i < [_instance.dataArray count]; i++) {
         CellData *currentCell = [_instance.dataArray objectAtIndex:i];
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-        [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-        NSString *dateString = [dateFormatter stringFromDate:currentCell.date];
-        [dateFormatter release];
+        
+        NSString *dateString = [TableViewDataSingleton stringFromDate:currentCell.date];
+
         
         xmlString = [xmlString stringByAppendingFormat:@"<cell title=\"%@\">\n", currentCell.title];
         xmlString = [xmlString stringByAppendingFormat:@"<date>%@</date>\n", dateString];
-        xmlString = [xmlString stringByAppendingFormat:@"<image>%@</image>\n", currentCell.image.description];
+        // !!! Вставка изображения в xml
+        //xmlString = [xmlString stringByAppendingFormat:@"<image>%@</image>\n", currentCell.image.description];
         xmlString = [xmlString stringByAppendingFormat:@"</cell>"];
     }
     
@@ -156,6 +174,7 @@ static TableViewDataSingleton *_instance;
     
     [dataLoader release];
     
+    //NSLog(@"Parsing succeed:%@", (success ? @"YES" : @"NO"));
     return success;
 }
 
@@ -167,13 +186,12 @@ static TableViewDataSingleton *_instance;
 // Загружаем из xml с помощью GData
 - (BOOL)loadGDataFromXML {
     self.dataArray = [[NSMutableArray alloc] init];
+    
     NSString *filePath = [TableViewDataSingleton dataFilePath:FALSE];
     NSData *xmlData = [[NSMutableData alloc] initWithContentsOfFile:filePath];
     NSError *error;
-    GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:xmlData
-                                                           options:0 error:&error];
-    if (doc == nil)
-    {
+    GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:xmlData options:0 error:&error];
+    if (doc == nil) {
         [xmlData release];
         return NO;
     }
@@ -181,7 +199,18 @@ static TableViewDataSingleton *_instance;
     NSArray *cells = [doc.rootElement elementsForName:@"cell"];
     for (GDataXMLElement *cell in cells) {
         NSString *title = [[cell attributeForName:@"title"]  stringValue];
-        [self.dataArray addObject:title];
+        
+        NSString *dateString = [[[cell elementsForName:@"date"] objectAtIndex:0] stringValue];
+        NSDate *date = [TableViewDataSingleton dateFromString:dateString];
+        
+        // !!! Работа с изображением
+        //NSString *imageString = [[[cell elementsForName:@"image"] objectAtIndex:0] stringValue];
+        
+        CellData *cellData = [[CellData alloc] initWithTitle:title withDate:date withImage:nil];
+        
+        [self.dataArray addObject:cellData];
+        
+        [cellData release];
     }
     
     [doc release];
@@ -197,13 +226,18 @@ static TableViewDataSingleton *_instance;
     GDataXMLElement * tableElement = [GDataXMLNode elementWithName:@"table"];
     
     for(int i=0; i<self.dataArray.count; i++) {
+        CellData *currentCell = [self.dataArray objectAtIndex:i];
         
-        GDataXMLElement * cellElement =
-        [GDataXMLNode elementWithName:@"cell"];
+        NSString *dateString = [TableViewDataSingleton stringFromDate:currentCell.date];
         
-        GDataXMLNode *titleElement = [GDataXMLNode attributeWithName:@"title" stringValue:[self.dataArray objectAtIndex:i]];
+        GDataXMLElement *cellElement = [GDataXMLNode elementWithName:@"cell"];
+        GDataXMLNode *titleElement = [GDataXMLNode attributeWithName:@"title" stringValue:currentCell.title];
+        GDataXMLElement *dateElement = [GDataXMLNode elementWithName:@"date" stringValue:dateString];
+        
+        // !!! Работа с изображением
         
         [cellElement addAttribute:titleElement];
+        [cellElement addChild:dateElement];
         [tableElement addChild:cellElement];
     }
     
@@ -214,7 +248,7 @@ static TableViewDataSingleton *_instance;
     
     NSString *filePath = [TableViewDataSingleton dataFilePath:TRUE];
     
-    NSLog(@"Saving xml data to %@...", filePath);
+    //NSLog(@"Saving xml data to %@...", filePath);
     [xmlData writeToFile:filePath atomically:YES];
     
 }

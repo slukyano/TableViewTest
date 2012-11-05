@@ -14,6 +14,7 @@
 {
     NSMutableArray *_dataArray;
     CellData *_tempCell;
+    NSMutableString *_tempString;
     BOOL _insideTheTable;
     BOOL _insideTheCell;
     BOOL _insideTheDate;
@@ -45,18 +46,12 @@
     [super dealloc];
 }
 
-- (NSMutableArray *) dataArray {
-    return _dataArray;
-}
-
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
+    //NSLog(@"did start element %@", elementName);
     if ([elementName isEqualToString:@"table"])
-    {
         _insideTheTable = YES;
-    }
-    else if ([elementName isEqualToString:@"cell"])
-    {
+    else if ([elementName isEqualToString:@"cell"]) {
         if (_insideTheTable) {
             _insideTheCell = YES;
             
@@ -66,74 +61,66 @@
             else
                 [parser abortParsing];
         }
-        else {
+        else
             [parser abortParsing];
-        }
     }
-    else if ([elementName isEqualToString:@"date"])
-    {
+    else if ([elementName isEqualToString:@"date"]) {
         if (_insideTheCell) 
             _insideTheDate = YES;
         else
             [parser abortParsing];
     }
-    else if ([elementName isEqualToString:@"image"])
-    {
+    else if ([elementName isEqualToString:@"image"]) {
         if (_insideTheCell)
             _insideTheImage = YES;
         else
             [parser abortParsing];
     }
     else
-    {
         [parser abortParsing];
-    }
 }
 
 - (void) parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
+    //NSLog(@"did end element %@", elementName);
     if ([elementName isEqualToString:@"table"] && _insideTheTable)
         _insideTheTable = NO;
-    else if ([elementName isEqualToString:@"cell"] && _insideTheCell)
-    {
+    else if ([elementName isEqualToString:@"cell"] && _insideTheCell) {
         [_dataArray addObject:_tempCell];
         [_tempCell release];
         
         _insideTheCell = NO;
     }
-    else if ([elementName isEqualToString:@"date"] && _insideTheDate)
+    else if ([elementName isEqualToString:@"date"] && _insideTheDate) {
+        NSDate *newDate = [TableViewDataSingleton dateFromString:_tempString];
+        [_tempCell setDate:newDate];
+        
         _insideTheDate = NO;
+    }
     else if ([elementName isEqualToString:@"image"] && _insideTheImage)
         _insideTheImage = NO;
     else
         [parser abortParsing];
+    
+    if (_tempString)
+    {
+        [_tempString release];
+        _tempString = nil;
+    }
 }
 
 - (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
-    if (_insideTheDate)
-    {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
-        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-        NSDate *newDate = [dateFormatter dateFromString:string];
-        [dateFormatter release];
-        
-        [_tempCell setDate:newDate];
-    }
-    else if (_insideTheImage)
-    {
-        // преобразование строки в изображение
-    }
-    else
-    {
-        [parser abortParsing];
-    }
-        
+    NSLog(@"found characters %@", string);
+    if (!_tempString)
+        _tempString = [[NSMutableString alloc] init];
+    
+    [_tempString appendString:string];
 }
 
 - (void) parserDidEndDocument:(NSXMLParser *)parser {
-    [delegate loader:self didEndLoadingDataArray:self.dataArray];
+    //NSLog(@"Send loaderDidEndLoadingDataArray");
+    [delegate loader:self didEndLoadingDataArray:_dataArray];
 }
 
 @end
