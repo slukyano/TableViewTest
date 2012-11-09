@@ -12,8 +12,10 @@
 
 @property (retain) NSString *title;
 @property (retain) NSDate *date;
-@property (retain) NSObject *image; // !!! NSObject нужно будет изменить
+@property (retain) UIImage *image;
+@property (assign) NSUInteger dataBaseIndex;
 
-- (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(NSObject *)image;
+- (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(UIImage *)image;
+- (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(UIImage *)image withDataBaseIndex:(NSUInteger)dataBaseIndex;
 
 @end

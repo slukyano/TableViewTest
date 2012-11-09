@@ -10,12 +10,14 @@
 #import "UserDataLoader.h"
 #import "GDataXMLNode.h"
 #import "CellData.h"
+#import "DataBaseManagerSingleton.h"
 
 @interface TableViewDataSingleton ()
 
 + (NSString *) dataFilePath:(BOOL)forSave;
 - (void) saveDataToXML;
 - (BOOL) loadDataFromXML;
+- (BOOL) loadDataFromDB;
 
 @end
 
@@ -37,10 +39,10 @@ static TableViewDataSingleton *_instance;
             if (![_instance loadData])
             {
                 NSDate *date = [NSDate date];
-            
-                // !!! Изменить изображение
-                CellData *cell = [[CellData alloc] initWithTitle:@"defaultcell" withDate:date withImage:nil];
-                _instance.dataArray = [NSMutableArray arrayWithObject:cell];
+                UIImage* image = [UIImage imageNamed:@"defaultImage.png"];
+                CellData *cell = [[CellData alloc] initWithTitle:@"defaultcell" withDate:date withImage:image withDataBaseIndex:0];
+                _instance.dataArray = [NSMutableArray array];
+                [_instance addObject:cell];
                 [cell release];
             }
         }
@@ -51,7 +53,6 @@ static TableViewDataSingleton *_instance;
 
 // Задаем путь файла
 + (NSString *)dataFilePath:(BOOL)forSave {
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
                                                          NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -64,27 +65,25 @@ static TableViewDataSingleton *_instance;
     
 }
 
+// TODO?: перенести в CellData или куда-то еще, тут не к месту. И для XML отдельный класс создать (?)
 + (NSString *) stringFromDate:(NSDate *)date {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *string = [dateFormatter stringFromDate:date];
     [dateFormatter release];
-    
     return string;
 }
 
 + (NSDate *) dateFromString:(NSString *)string {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-    [dateFormatter setTimeStyle:NSDateFormatterFullStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSDate *date = [dateFormatter dateFromString:string];
     [dateFormatter release];
     
     return date;
 }
 
-// Дублируем необходимые методы класса NSMutableArray
+// Дублируем необходимые методы класса NSMutableArray и сохраняем изменения в базе данных или XML
 - (NSUInteger) count {
     return [dataArray count];
 }
@@ -93,36 +92,97 @@ static TableViewDataSingleton *_instance;
     return [dataArray objectAtIndex:index];
 }
 
+// Изменяем данные, вызываем методы DataBaseManager или сохраняем в XML; индексы для методов DataBaseManager - индексы базы
+// TODO: по возмжности сделать что-нибудь, мне не нравится. Особенно индексы.
+
 - (void) addObject:(id)anObject {
     [dataArray addObject:anObject];
-    [self saveData];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *loader = [defaults stringForKey:@"loader_preference"];
+    
+    if ([loader isEqualToString:@"SQLite"]) {
+        [[DataBaseManagerSingleton instance] addCell:anObject];
+        NSLog(@"Add: DB");
+    }
+    else {
+        [self saveData];
+    }
 }
 
 - (void) removeObjectAtIndex:(NSUInteger)index {
+    NSUInteger currentDataBaseIndex = [[dataArray objectAtIndex:index] dataBaseIndex];
     [dataArray removeObjectAtIndex:index];
-    [self saveData];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *loader = [defaults stringForKey:@"loader_preference"];
+    
+    if ([loader isEqualToString:@"SQLite"]) {
+        [[DataBaseManagerSingleton instance] removeCellAtIndex:currentDataBaseIndex];
+        NSLog(@"Remove: DB");
+    }
+    else {
+        [self saveData];
+    }
 }
 
 - (void) exchangeObjectAtIndex:(NSUInteger)idx1 withObjectAtIndex:(NSUInteger)idx2 {
-    [dataArray exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
-    [self saveData];
+    CellData *cell1 = [self objectAtIndex:idx1];
+    CellData *cell2 = [self objectAtIndex:idx2];
+    
+    NSUInteger currentDataBaseIndex1 = [cell1 dataBaseIndex];
+    NSUInteger currentDataBaseIndex2 = [cell2 dataBaseIndex];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *loader = [defaults stringForKey:@"loader_preference"];
+    
+    if ([loader isEqualToString:@"SQLite"]) {
+        [[DataBaseManagerSingleton instance] replaceCellAtIndex:currentDataBaseIndex1 withCell:cell2];
+        [[DataBaseManagerSingleton instance] replaceCellAtIndex:currentDataBaseIndex2 withCell:cell1];
+        NSLog(@"Exchange: DB");
+        
+        [dataArray exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
+    }
+    else {
+        [dataArray exchangeObjectAtIndex:idx1 withObjectAtIndex:idx2];
+        
+        [self saveData];
+    }
 }
 
 - (void) replaceObjectAtIndex:(NSUInteger)index withObject:(id)anObject {
+    NSUInteger currentDataBaseIndex = [[self objectAtIndex:index] dataBaseIndex];
+    
     [dataArray replaceObjectAtIndex:index withObject:anObject];
-    [self saveData];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *loader = [defaults stringForKey:@"loader_preference"];
+    
+    if ([loader isEqualToString:@"SQLite"]) {
+        [[DataBaseManagerSingleton instance] replaceCellAtIndex:currentDataBaseIndex withCell:anObject];
+        NSLog(@"Replace: DB");
+    }
+    else {
+        [self saveData];
+    }
 }
 
-// Загружаем в зависимости от настроек: "parse_preference" - "YES" означает предпочтение DOM
+// Загружаем в зависимости от настроек
 -(BOOL)loadData {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *loader = [defaults stringForKey:@"loader_preference"];
 
-    if ([defaults boolForKey:@"parse_preference"])
-        return [self loadGDataFromXML];
-    else {
-        //NSLog(@"NSXML");
-        return [self loadDataFromXML];
+    if ([loader isEqualToString:@"SQLite"]) {
+        NSLog(@"DB");
+        return [self loadDataFromDB];
     }
+    else if ([loader isEqualToString:@"GDataXML"])
+        return [self loadGDataFromXML];
+    else if ([loader isEqualToString:@"NSXML"])
+            return [self loadDataFromXML];
+    
+    NSLog(@"Loading error: no loader");
+    return NO;
 }
 
 // Сохраняем в зависисмости от настроек
@@ -132,7 +192,6 @@ static TableViewDataSingleton *_instance;
     if ([defaults boolForKey:@"parse_preference"])
         [self saveGDataToXML];
     else {
-        //NSLog(@"NSXML");
         [self saveDataToXML];
     }
 }
@@ -145,12 +204,9 @@ static TableViewDataSingleton *_instance;
         CellData *currentCell = [_instance.dataArray objectAtIndex:i];
         
         NSString *dateString = [TableViewDataSingleton stringFromDate:currentCell.date];
-
-        
         xmlString = [xmlString stringByAppendingFormat:@"<cell title=\"%@\">\n", currentCell.title];
         xmlString = [xmlString stringByAppendingFormat:@"<date>%@</date>\n", dateString];
-        // !!! Вставка изображения в xml
-        //xmlString = [xmlString stringByAppendingFormat:@"<image>%@</image>\n", currentCell.image.description];
+        
         xmlString = [xmlString stringByAppendingFormat:@"</cell>"];
     }
     
@@ -174,7 +230,6 @@ static TableViewDataSingleton *_instance;
     
     [dataLoader release];
     
-    //NSLog(@"Parsing succeed:%@", (success ? @"YES" : @"NO"));
     return success;
 }
 
@@ -202,14 +257,10 @@ static TableViewDataSingleton *_instance;
         
         NSString *dateString = [[[cell elementsForName:@"date"] objectAtIndex:0] stringValue];
         NSDate *date = [TableViewDataSingleton dateFromString:dateString];
-        
         // !!! Работа с изображением
-        //NSString *imageString = [[[cell elementsForName:@"image"] objectAtIndex:0] stringValue];
-        
-        CellData *cellData = [[CellData alloc] initWithTitle:title withDate:date withImage:nil];
-        
+        UIImage* image = [UIImage imageNamed:@"defaultImage.png"];
+        CellData *cellData = [[CellData alloc] initWithTitle:title withDate:date withImage:image];
         [self.dataArray addObject:cellData];
-        
         [cellData release];
     }
     
@@ -248,9 +299,21 @@ static TableViewDataSingleton *_instance;
     
     NSString *filePath = [TableViewDataSingleton dataFilePath:TRUE];
     
-    //NSLog(@"Saving xml data to %@...", filePath);
+    NSLog(@"Saving xml data to %@...", filePath);
     [xmlData writeToFile:filePath atomically:YES];
     
+}
+
+// Загружаем массив из базы данных
+- (BOOL) loadDataFromDB {
+    NSMutableArray *dataBaseDataArray = [[DataBaseManagerSingleton instance] dataArrayFromDB];
+    
+    if (dataBaseDataArray != nil) {
+        self.dataArray = [NSMutableArray arrayWithArray:dataBaseDataArray];
+        return YES;
+    }
+    else
+        return NO;
 }
 
 @end

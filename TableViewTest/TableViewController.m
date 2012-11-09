@@ -10,6 +10,7 @@
 #import "EditViewController.h"
 #import "TableViewDataSingleton.h"
 #import "CellData.h"
+#import "TableCell.h"
 
 @implementation TableViewController
 
@@ -61,26 +62,25 @@
 //Заполняем таблицу
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    NSString *CellIdentifier = @"Cell";
+    TableCell *cell = (TableCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        UIViewController *tempVC = [[UIViewController alloc] initWithNibName:@"TableCell" bundle:nil];
+        cell=(TableCell *)tempVC.view;
+        [tempVC release];
     }
-    
-    cell.textLabel.text = [[[TableViewDataSingleton instance] objectAtIndex:indexPath.row] title];
+    cell.TextLabel.text = [[[TableViewDataSingleton instance] objectAtIndex:indexPath.row] title];
+    cell.DateLabel.text = [TableViewDataSingleton stringFromDate:[[[TableViewDataSingleton instance] objectAtIndex:indexPath.row] date]];
+    cell.ImageView.image = [[[TableViewDataSingleton instance] objectAtIndex:indexPath.row] image];
     return cell;
 
 }
 
 //Добавление ячейки
-- (void) adding {
-    CellData *cellData = [[CellData alloc] initWithTitle:@"" withDate:nil withImage:nil];
-    [[TableViewDataSingleton instance] addObject:cellData];
-    [cellData release];
-    
+- (void) adding {    
     EditViewController *editlViewController = [[EditViewController alloc]
-                                               initWithNibName:@"EditViewController" bundle:nil rowToEdit:[[TableViewDataSingleton instance] count]-1 editorMode:EditViewControllerModeAdd];
+                                               initWithNibName:@"EditViewController" bundle:nil rowToEdit:[[TableViewDataSingleton instance] count] editorMode:EditViewControllerModeAdd];
     [self.navigationController pushViewController:editlViewController animated:YES];
     [editlViewController release];
 
@@ -130,6 +130,22 @@
 //Обнавляем таблицу при появлении данного View 
 - (void) viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
+}
+
+// Ограничиваем перенос ячейки до одной строки, иначе порядок в массиве сбивается
+- (NSIndexPath *) tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    NSIndexPath *newDestinationIndexPath;
+    if (proposedDestinationIndexPath.row > sourceIndexPath.row)
+        newDestinationIndexPath = [NSIndexPath indexPathForRow:(sourceIndexPath.row + 1)
+                                                     inSection:sourceIndexPath.section];
+    else if (proposedDestinationIndexPath.row < sourceIndexPath.row)
+        newDestinationIndexPath = [NSIndexPath indexPathForRow:(sourceIndexPath.row - 1)
+                                                     inSection:sourceIndexPath.section];
+    else
+        newDestinationIndexPath = sourceIndexPath;
+    
+    return newDestinationIndexPath;
 }
 
 @end

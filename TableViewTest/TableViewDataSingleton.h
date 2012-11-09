@@ -19,6 +19,7 @@
 + (NSString *) stringFromDate:(NSDate *)date;
 + (NSDate *) dateFromString:(NSString *)string;
 - (NSUInteger) count;
+// Индексы - номера строк
 - (id) objectAtIndex:(NSUInteger)index;
 - (void) addObject:(id)anObject;
 - (void) removeObjectAtIndex:(NSUInteger)index;

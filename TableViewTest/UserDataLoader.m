@@ -18,7 +18,7 @@
     BOOL _insideTheTable;
     BOOL _insideTheCell;
     BOOL _insideTheDate;
-    BOOL _insideTheImage;
+    //BOOL _insideTheImage;
 }
 
 @end
@@ -33,7 +33,7 @@
         _insideTheTable = NO;
         _insideTheCell = NO;
         _insideTheDate = NO;
-        _insideTheImage = NO;
+        //_insideTheImage = NO;
         _dataArray = [[NSMutableArray alloc] init];
     }
     
@@ -48,7 +48,6 @@
 
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
-    //NSLog(@"did start element %@", elementName);
     if ([elementName isEqualToString:@"table"])
         _insideTheTable = YES;
     else if ([elementName isEqualToString:@"cell"]) {
@@ -70,22 +69,31 @@
         else
             [parser abortParsing];
     }
-    else if ([elementName isEqualToString:@"image"]) {
+    /*else if ([elementName isEqualToString:@"image"]) {
         if (_insideTheCell)
             _insideTheImage = YES;
         else
             [parser abortParsing];
-    }
+    }*/
     else
         [parser abortParsing];
 }
 
+// Буферизуем строку внутри тегов
+- (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+    if (!_tempString)
+        _tempString = [[NSMutableString alloc] init];
+    
+    [_tempString appendString:string];
+}
+
 - (void) parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
 {
-    //NSLog(@"did end element %@", elementName);
     if ([elementName isEqualToString:@"table"] && _insideTheTable)
         _insideTheTable = NO;
     else if ([elementName isEqualToString:@"cell"] && _insideTheCell) {
+        UIImage* image = [UIImage imageNamed:@"defaultImage.png"];
+        [_tempCell setImage:image];
         [_dataArray addObject:_tempCell];
         [_tempCell release];
         
@@ -97,29 +105,18 @@
         
         _insideTheDate = NO;
     }
-    else if ([elementName isEqualToString:@"image"] && _insideTheImage)
-        _insideTheImage = NO;
+    /*else if ([elementName isEqualToString:@"image"] && _insideTheImage)
+        _insideTheImage = NO;*/
     else
         [parser abortParsing];
     
-    if (_tempString)
-    {
+    if (_tempString) {
         [_tempString release];
         _tempString = nil;
     }
 }
 
-- (void) parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
-{
-    NSLog(@"found characters %@", string);
-    if (!_tempString)
-        _tempString = [[NSMutableString alloc] init];
-    
-    [_tempString appendString:string];
-}
-
 - (void) parserDidEndDocument:(NSXMLParser *)parser {
-    //NSLog(@"Send loaderDidEndLoadingDataArray");
     [delegate loader:self didEndLoadingDataArray:_dataArray];
 }
 

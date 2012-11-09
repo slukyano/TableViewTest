@@ -7,11 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C391B6B91638709B00AC9C59 /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C391B6B71638709B00AC9C59 /* EditViewController.m */; };
-		C391B6BA1638709B00AC9C59 /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C391B6B81638709B00AC9C59 /* EditViewController.xib */; };
 		C3B7EA061641BBF900C78D64 /* GDataXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = C3B7EA051641BBF900C78D64 /* GDataXMLNode.m */; };
 		C3B7EA081641BC4600C78D64 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C3B7EA071641BC4600C78D64 /* libxml2.dylib */; };
 		C3C5FE3316424C5F003C7FC0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C3C5FE3216424C5F003C7FC0 /* Settings.bundle */; };
+		C3C85253164AD2CB003E103D /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8524C164AD2CB003E103D /* EditViewController.m */; };
+		C3C85254164AD2CB003E103D /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3C8524D164AD2CB003E103D /* EditViewController.xib */; };
+		C3C85255164AD2CB003E103D /* PopoverDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C8524F164AD2CB003E103D /* PopoverDateViewController.m */; };
+		C3C85256164AD2CB003E103D /* PopoverDateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3C85250164AD2CB003E103D /* PopoverDateViewController.xib */; };
+		C3C85257164AD2CB003E103D /* PopoverImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3C85252164AD2CB003E103D /* PopoverImageViewController.m */; };
+		C3CA8750164BEF8F00803A4E /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = C3CA874E164BEF8F00803A4E /* button.png */; };
+		C3CA8751164BEF8F00803A4E /* defaultImage.png in Resources */ = {isa = PBXBuildFile; fileRef = C3CA874F164BEF8F00803A4E /* defaultImage.png */; };
+		C3CA8754164BF94100803A4E /* TableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C3CA8753164BF94100803A4E /* TableCell.m */; };
+		C3CA8757164BF98800803A4E /* TableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3CA8756164BF98800803A4E /* TableCell.xib */; };
 		C3D565FA1638298A00389750 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D565F91638298A00389750 /* UIKit.framework */; };
 		C3D565FC1638298A00389750 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D565FB1638298A00389750 /* Foundation.framework */; };
 		C3D565FE1638298A00389750 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D565FD1638298A00389750 /* CoreGraphics.framework */; };
@@ -25,18 +32,30 @@
 		C3D5661B16382A1E00389750 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C3D5661916382A1E00389750 /* TableViewController.m */; };
 		C3D5661C16382A1E00389750 /* TableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3D5661A16382A1E00389750 /* TableViewController.xib */; };
 		CE74A02D1646E3E8004EE375 /* CellData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE74A02C1646E3E8004EE375 /* CellData.m */; };
+		CE76819A164C6364009EE5E4 /* DataBaseManagerSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = CE768199164C6364009EE5E4 /* DataBaseManagerSingleton.m */; };
+		CE76819F164C80DE009EE5E4 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE76819E164C80DD009EE5E4 /* libsqlite3.dylib */; };
 		CE99787316408B9100359B98 /* UserDataLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = CE99787216408B9100359B98 /* UserDataLoader.m */; };
 		CEFF2785163B10B800B6C941 /* TableViewDataSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C391B6B61638709B00AC9C59 /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
-		C391B6B71638709B00AC9C59 /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
-		C391B6B81638709B00AC9C59 /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
 		C3B7EA041641BBF900C78D64 /* GDataXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GDataXMLNode.h; path = ../GDataXMLNode.h; sourceTree = "<group>"; };
 		C3B7EA051641BBF900C78D64 /* GDataXMLNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GDataXMLNode.m; path = ../GDataXMLNode.m; sourceTree = "<group>"; };
 		C3B7EA071641BC4600C78D64 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		C3C5FE3216424C5F003C7FC0 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		C3C8524B164AD2CB003E103D /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
+		C3C8524C164AD2CB003E103D /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
+		C3C8524D164AD2CB003E103D /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
+		C3C8524E164AD2CB003E103D /* PopoverDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverDateViewController.h; sourceTree = "<group>"; };
+		C3C8524F164AD2CB003E103D /* PopoverDateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverDateViewController.m; sourceTree = "<group>"; };
+		C3C85250164AD2CB003E103D /* PopoverDateViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopoverDateViewController.xib; sourceTree = "<group>"; };
+		C3C85251164AD2CB003E103D /* PopoverImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopoverImageViewController.h; sourceTree = "<group>"; };
+		C3C85252164AD2CB003E103D /* PopoverImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopoverImageViewController.m; sourceTree = "<group>"; };
+		C3CA874E164BEF8F00803A4E /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button.png; sourceTree = "<group>"; };
+		C3CA874F164BEF8F00803A4E /* defaultImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultImage.png; sourceTree = "<group>"; };
+		C3CA8752164BF94100803A4E /* TableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableCell.h; sourceTree = "<group>"; };
+		C3CA8753164BF94100803A4E /* TableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableCell.m; sourceTree = "<group>"; };
+		C3CA8756164BF98800803A4E /* TableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableCell.xib; sourceTree = "<group>"; };
 		C3D565F51638298A00389750 /* TableViewTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TableViewTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3D565F91638298A00389750 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C3D565FB1638298A00389750 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -56,6 +75,9 @@
 		C3D5661A16382A1E00389750 /* TableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewController.xib; sourceTree = "<group>"; };
 		CE74A02B1646E3E8004EE375 /* CellData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellData.h; sourceTree = "<group>"; };
 		CE74A02C1646E3E8004EE375 /* CellData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellData.m; sourceTree = "<group>"; };
+		CE768198164C6364009EE5E4 /* DataBaseManagerSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBaseManagerSingleton.h; sourceTree = "<group>"; };
+		CE768199164C6364009EE5E4 /* DataBaseManagerSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBaseManagerSingleton.m; sourceTree = "<group>"; };
+		CE76819E164C80DD009EE5E4 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		CE99787116408B9100359B98 /* UserDataLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataLoader.h; sourceTree = "<group>"; };
 		CE99787216408B9100359B98 /* UserDataLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataLoader.m; sourceTree = "<group>"; };
 		CEFF2783163B10B800B6C941 /* TableViewDataSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewDataSingleton.h; sourceTree = "<group>"; };
@@ -67,6 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE76819F164C80DE009EE5E4 /* libsqlite3.dylib in Frameworks */,
 				C3B7EA081641BC4600C78D64 /* libxml2.dylib in Frameworks */,
 				C3D565FA1638298A00389750 /* UIKit.framework in Frameworks */,
 				C3D565FC1638298A00389750 /* Foundation.framework in Frameworks */,
@@ -77,6 +100,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C3CA8755164BF95100803A4E /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C3CA8756164BF98800803A4E /* TableCell.xib */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
 		C3D565EA1638298A00389750 = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +129,7 @@
 		C3D565F81638298A00389750 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE76819E164C80DD009EE5E4 /* libsqlite3.dylib */,
 				C3B7EA071641BC4600C78D64 /* libxml2.dylib */,
 				C3D565F91638298A00389750 /* UIKit.framework */,
 				C3D565FB1638298A00389750 /* Foundation.framework */,
@@ -111,17 +143,8 @@
 			children = (
 				C3D566081638298A00389750 /* AppDelegate.h */,
 				C3D566091638298A00389750 /* AppDelegate.m */,
-				C391B6B61638709B00AC9C59 /* EditViewController.h */,
-				C391B6B71638709B00AC9C59 /* EditViewController.m */,
-				C3D5661816382A1E00389750 /* TableViewController.h */,
-				C3D5661916382A1E00389750 /* TableViewController.m */,
-				CEFF2783163B10B800B6C941 /* TableViewDataSingleton.h */,
-				CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */,
-				CE99787116408B9100359B98 /* UserDataLoader.h */,
-				CE99787216408B9100359B98 /* UserDataLoader.m */,
-				CE74A02B1646E3E8004EE375 /* CellData.h */,
-				CE74A02C1646E3E8004EE375 /* CellData.m */,
-				CE74A02A1646C725004EE375 /* GDataXMLNode */,
+				CE76819C164C6382009EE5E4 /* User interface */,
+				CE76819D164C63A6009EE5E4 /* Data Management */,
 				C3D566001638298A00389750 /* Supporting Files */,
 				CE99785F163F3F1000359B98 /* Xibs */,
 			);
@@ -131,6 +154,8 @@
 		C3D566001638298A00389750 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C3CA874E164BEF8F00803A4E /* button.png */,
+				C3CA874F164BEF8F00803A4E /* defaultImage.png */,
 				C3D566011638298A00389750 /* TableViewTest-Info.plist */,
 				C3D566021638298A00389750 /* InfoPlist.strings */,
 				C3D566051638298A00389750 /* main.m */,
@@ -151,12 +176,47 @@
 			name = GDataXMLNode;
 			sourceTree = "<group>";
 		};
+		CE76819C164C6382009EE5E4 /* User interface */ = {
+			isa = PBXGroup;
+			children = (
+				CE74A02A1646C725004EE375 /* GDataXMLNode */,
+				C3D5661816382A1E00389750 /* TableViewController.h */,
+				C3D5661916382A1E00389750 /* TableViewController.m */,
+				C3CA8752164BF94100803A4E /* TableCell.h */,
+				C3CA8753164BF94100803A4E /* TableCell.m */,
+				C3C8524B164AD2CB003E103D /* EditViewController.h */,
+				C3C8524C164AD2CB003E103D /* EditViewController.m */,
+				C3C8524E164AD2CB003E103D /* PopoverDateViewController.h */,
+				C3C8524F164AD2CB003E103D /* PopoverDateViewController.m */,
+				C3C85251164AD2CB003E103D /* PopoverImageViewController.h */,
+				C3C85252164AD2CB003E103D /* PopoverImageViewController.m */,
+			);
+			name = "User interface";
+			sourceTree = "<group>";
+		};
+		CE76819D164C63A6009EE5E4 /* Data Management */ = {
+			isa = PBXGroup;
+			children = (
+				CE768198164C6364009EE5E4 /* DataBaseManagerSingleton.h */,
+				CE768199164C6364009EE5E4 /* DataBaseManagerSingleton.m */,
+				CEFF2783163B10B800B6C941 /* TableViewDataSingleton.h */,
+				CEFF2784163B10B800B6C941 /* TableViewDataSingleton.m */,
+				CE99787116408B9100359B98 /* UserDataLoader.h */,
+				CE99787216408B9100359B98 /* UserDataLoader.m */,
+				CE74A02B1646E3E8004EE375 /* CellData.h */,
+				CE74A02C1646E3E8004EE375 /* CellData.m */,
+			);
+			name = "Data Management";
+			sourceTree = "<group>";
+		};
 		CE99785F163F3F1000359B98 /* Xibs */ = {
 			isa = PBXGroup;
 			children = (
+				C3C8524D164AD2CB003E103D /* EditViewController.xib */,
+				C3C85250164AD2CB003E103D /* PopoverDateViewController.xib */,
 				C3D56616163829B800389750 /* Window.xib */,
-				C391B6B81638709B00AC9C59 /* EditViewController.xib */,
 				C3D5661A16382A1E00389750 /* TableViewController.xib */,
+				C3CA8755164BF95100803A4E /* Cell */,
 			);
 			name = Xibs;
 			sourceTree = "<group>";
@@ -218,8 +278,12 @@
 				C3D566101638298A00389750 /* Default-568h@2x.png in Resources */,
 				C3D56617163829B800389750 /* Window.xib in Resources */,
 				C3D5661C16382A1E00389750 /* TableViewController.xib in Resources */,
-				C391B6BA1638709B00AC9C59 /* EditViewController.xib in Resources */,
 				C3C5FE3316424C5F003C7FC0 /* Settings.bundle in Resources */,
+				C3C85254164AD2CB003E103D /* EditViewController.xib in Resources */,
+				C3C85256164AD2CB003E103D /* PopoverDateViewController.xib in Resources */,
+				C3CA8750164BEF8F00803A4E /* button.png in Resources */,
+				C3CA8751164BEF8F00803A4E /* defaultImage.png in Resources */,
+				C3CA8757164BF98800803A4E /* TableCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,11 +297,15 @@
 				C3D566061638298A00389750 /* main.m in Sources */,
 				C3D5660A1638298A00389750 /* AppDelegate.m in Sources */,
 				C3D5661B16382A1E00389750 /* TableViewController.m in Sources */,
-				C391B6B91638709B00AC9C59 /* EditViewController.m in Sources */,
 				CEFF2785163B10B800B6C941 /* TableViewDataSingleton.m in Sources */,
 				CE99787316408B9100359B98 /* UserDataLoader.m in Sources */,
 				C3B7EA061641BBF900C78D64 /* GDataXMLNode.m in Sources */,
 				CE74A02D1646E3E8004EE375 /* CellData.m in Sources */,
+				C3C85253164AD2CB003E103D /* EditViewController.m in Sources */,
+				C3C85255164AD2CB003E103D /* PopoverDateViewController.m in Sources */,
+				C3C85257164AD2CB003E103D /* PopoverImageViewController.m in Sources */,
+				C3CA8754164BF94100803A4E /* TableCell.m in Sources */,
+				CE76819A164C6364009EE5E4 /* DataBaseManagerSingleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

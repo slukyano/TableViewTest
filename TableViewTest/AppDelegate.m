@@ -23,8 +23,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Регистрируем настройки по умолчанию
-    NSMutableDictionary *defaultValues = [NSDictionary
-                                          dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"parse_preference"];
+    NSMutableDictionary *defaultValues = [NSDictionary dictionaryWithObject:@"SQLite"
+                                          forKey:@"loader_preference"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
     
     self.window.rootViewController = self.navigationController;

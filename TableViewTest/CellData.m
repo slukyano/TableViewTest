@@ -10,7 +10,7 @@
 
 @implementation CellData
 
-- (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(NSObject *)image {
+- (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(UIImage *)image {
     self = [super init];
     if (self) {
         self.title = title;
@@ -21,4 +21,24 @@
     return self;
 }
 
+- (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(UIImage *)image withDataBaseIndex:(NSUInteger)dataBaseIndex {
+    self = [super init];
+    if (self) {
+        self.title = title;
+        self.date = date;
+        self.image = image;
+        self.dataBaseIndex = dataBaseIndex;
+    }
+    
+    return self;
+}
+
+- (void) dealloc {
+    [self.title release];
+    [self.image release];
+    [self.date release];
+    [self.image release];
+    [super dealloc];
+    
+}
 @end
