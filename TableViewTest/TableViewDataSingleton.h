@@ -12,7 +12,7 @@
 @interface TableViewDataSingleton : NSObject <UserDataLoaderDelegate>
 
 // Массив с данными ячеек
-@property (retain) NSMutableArray *dataArray;
+@property (nonatomic, retain) NSMutableArray *dataArray;
 
 // Возвращает указатель на экземпляр
 + (TableViewDataSingleton *) instance;

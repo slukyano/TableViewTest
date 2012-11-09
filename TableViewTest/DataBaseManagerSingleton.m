@@ -90,7 +90,7 @@ static int setRowCounterCallback(void *rowCounterPointer,
                                  int numberOfColumns,
                                  char **columnText,
                                  char **columnNames) {
-    rowCounter = (columnText[0] != nil) ? (atoi(columnText[0]) + 1) : 0;
+    rowCounter = (columnText[0] != nil) ? (atoi(columnText[0]) + 1) : 1;
     
     return 0;
 }
@@ -132,6 +132,7 @@ static int setRowCounterCallback(void *rowCounterPointer,
         NSLog(@"DB: close error");
     
     [cell setDataBaseIndex:index];
+    NSLog(@"Index = %d", index);
 }
 
 - (void) removeCellAtIndex:(NSUInteger)index {
@@ -154,7 +155,7 @@ static int setRowCounterCallback(void *rowCounterPointer,
     if (sqlite3_close(db))
         NSLog(@"DB: close error");
     
-    free(query);
+    //free(query);
 }
 
 - (void) replaceCellAtIndex:(NSUInteger)index withCell:(CellData *)cell {

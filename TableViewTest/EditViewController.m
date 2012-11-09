@@ -104,7 +104,8 @@
         [cellData release];
     }
     else
-        [[TableViewDataSingleton instance] removeObjectAtIndex:rowCurrentCell];
+        if (editorMode == EditViewControllerModeEdit)
+            [[TableViewDataSingleton instance] removeObjectAtIndex:rowCurrentCell];
 }
 
 - (void) dateSelected:(NSDate *)newDate {

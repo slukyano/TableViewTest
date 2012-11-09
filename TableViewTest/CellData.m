@@ -35,9 +35,11 @@
 
 - (void) dealloc {
     [self.title release];
+    //self.title = nil;
     [self.image release];
+    //self.image = nil;
     [self.date release];
-    [self.image release];
+    //self.date = nil;
     [super dealloc];
     
 }

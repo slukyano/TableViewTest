@@ -10,9 +10,9 @@
 
 @interface CellData : NSObject
 
-@property (retain) NSString *title;
-@property (retain) NSDate *date;
-@property (retain) UIImage *image;
+@property (nonatomic, retain) NSString *title;
+@property (nonatomic, retain) NSDate *date;
+@property (nonatomic, retain) UIImage *image;
 @property (assign) NSUInteger dataBaseIndex;
 
 - (id) initWithTitle:(NSString *)title withDate:(NSDate *)date withImage:(UIImage *)image;
