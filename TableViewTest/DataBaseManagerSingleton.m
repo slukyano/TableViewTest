@@ -54,16 +54,12 @@ static int setRowCounterCallback(void *rowCounterPointer, int numberOfColumns, c
         sqlite3 *db = 0;
         const char *dbPath = [[DataBaseManagerSingleton dataBasePath:YES] UTF8String];
         char *err = 0;
-    
+        
+        // Открываем базу
         if (sqlite3_open(dbPath, &db))
             NSLog(@"DB: open error");
         
-        //const char *droptable = "DROP TABLE IF EXISTS Cells";
-        /*if (sqlite3_exec(db, droptable, nil, nil, &err)) {
-            printf("%s", err);
-            sqlite3_free(err);
-        }*/
-        
+        // Создаем новую таблицу, если ее нет
         const char *createTable = "CREATE TABLE IF NOT EXISTS Cells(title, date, image, rowNumber);";
         if (sqlite3_exec(db, createTable, nil, nil, &err)) {
             NSLog(@"%s", err);
@@ -71,13 +67,16 @@ static int setRowCounterCallback(void *rowCounterPointer, int numberOfColumns, c
         }
         
         // Восстанавливаем счетчик созданных записей
-        // TODO: exec заменить на get_table или prepare-step-finalize      
         const char *selectMaxRowNumber = "SELECT MAX(rowNumber) FROM Cells;";
-        if (sqlite3_exec(db, selectMaxRowNumber, &setRowCounterCallback, &rowCounter, &err)) {
+        char **selectedTable;
+        int numberOfRows;
+        if (sqlite3_get_table(db, selectMaxRowNumber, &selectedTable, &numberOfRows, nil, &err)) {
             NSLog(@"%s", err);
             sqlite3_free(err);
         }
+        rowCounter = (numberOfRows == 1) ? (atoi(selectedTable[1]) + 1) : 1;
         
+        // Закрываем базу
         if (sqlite3_close(db))
             NSLog(@"DB: close error");
     }
@@ -155,7 +154,7 @@ static int setRowCounterCallback(void *rowCounterPointer,
     if (sqlite3_close(db))
         NSLog(@"DB: close error");
     
-    //free(query);
+    free(query);
 }
 
 - (void) replaceCellAtIndex:(NSUInteger)index withCell:(CellData *)cell {
