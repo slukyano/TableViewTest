@@ -127,7 +127,7 @@
     [super dealloc];
 }
 
-//Обнавляем таблицу при появлении данного View 
+//Обновляем таблицу при появлении данного View 
 - (void) viewDidAppear:(BOOL)animated {
     [self.tableView reloadData];
 }

@@ -16,7 +16,7 @@ typedef enum
     EditViewControllerModeEdit
 } EditViewControllerMode;
 
-@interface EditViewController : UIViewController <DataPickerDelegate,UIImagePickerControllerDelegate>{
+@interface EditViewController : UIViewController <DataPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>{
     PopoverDateViewController *_datePicker;
     UIPopoverController *_datePickerPopover;
     UIImagePickerController *_imagePicker;

@@ -115,9 +115,14 @@
 
 - (IBAction) DateButtonTapped:(id)sender {
     if (_datePicker == nil) {
-        self.datePicker = [[PopoverDateViewController alloc] initWithNibName:@"PopoverDateViewController" bundle:nil] ;
+        PopoverDateViewController *newPopoverDateViewController = [[PopoverDateViewController alloc] initWithNibName:@"PopoverDateViewController" bundle:nil];
+        self.datePicker = newPopoverDateViewController;
+        [newPopoverDateViewController release];
         _datePicker.delegate = self;
-        self.datePickerPopover = [[UIPopoverController alloc] initWithContentViewController:_datePicker];
+        
+        UIPopoverController *newUIPopoverController = [[UIPopoverController alloc] initWithContentViewController:_datePicker];
+        self.datePickerPopover = newUIPopoverController;
+        [newUIPopoverController release];
     }
     [self.datePickerPopover presentPopoverFromRect:((UIButton *)sender).frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 
@@ -125,11 +130,15 @@
 
 - (IBAction)ImageButtonTapped:(id)sender {
     if (_imagePicker == nil) {
-        self.imagePicker = [[UIImagePickerController alloc] init];
+        UIImagePickerController *newUIImagePickerController = [[UIImagePickerController alloc] init];
+        self.imagePicker = newUIImagePickerController;
+        [newUIImagePickerController release];
         _imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         _imagePicker.delegate = self;
         
-        self.imagePickerPopover = [[UIPopoverController alloc] initWithContentViewController:_imagePicker];
+        UIPopoverController *newUIPopoverController = [[UIPopoverController alloc] initWithContentViewController:_imagePicker];
+        self.imagePickerPopover = newUIPopoverController;
+        [newUIPopoverController release];
     }
     [self.imagePickerPopover presentPopoverFromRect:((UIButton *)sender).frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }

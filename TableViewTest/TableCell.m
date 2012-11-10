@@ -28,11 +28,11 @@
 }
 
 - (void)dealloc {
-    [TextLabel release];
+    //[TextLabel release];
     TextLabel = nil;
-    [DateLabel release];
+    //[DateLabel release];
     DateLabel = nil;
-    [ImageView release];
+    //[ImageView release];
     ImageView = nil;
     [super dealloc];
 }
