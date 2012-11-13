@@ -26,8 +26,6 @@ static DataBaseManagerSingleton *_instance;
 // Счетчик выделенных ячеек за все время существования базы
 static NSUInteger rowCounter;
 
-static int setRowCounterCallback(void *rowCounterPointer, int numberOfColumns, char **columnText, char **columnNames);
-
 + (DataBaseManagerSingleton *) instance {
     if (_instance == nil)
     {
@@ -76,22 +74,14 @@ static int setRowCounterCallback(void *rowCounterPointer, int numberOfColumns, c
         }
         rowCounter = (numberOfRows == 1) ? (atoi(selectedTable[1]) + 1) : 1;
         
+        sqlite3_free_table(selectedTable);
+        
         // Закрываем базу
         if (sqlite3_close(db))
             NSLog(@"DB: close error");
     }
     
     return self;
-}
-
-// callback-функция для восстановления счетчика
-static int setRowCounterCallback(void *rowCounterPointer,
-                                 int numberOfColumns,
-                                 char **columnText,
-                                 char **columnNames) {
-    rowCounter = (columnText[0] != nil) ? (atoi(columnText[0]) + 1) : 1;
-    
-    return 0;
 }
 
 // Снаружи ячейки добавляются только на вершину
@@ -108,8 +98,8 @@ static int setRowCounterCallback(void *rowCounterPointer,
     if (sqlite3_open(dbPath, &db))
         NSLog(@"DB: open error");
     
-    const char *title = [cell.title UTF8String];
-    const char *date = [[TableViewDataSingleton stringFromDate:cell.date] UTF8String];
+    char *title = (char *)[cell.title UTF8String];
+    char *date = (char *)[[TableViewDataSingleton stringFromDate:cell.date] UTF8String];
     
     NSData *image = UIImagePNGRepresentation(cell.image);
     
@@ -129,6 +119,9 @@ static int setRowCounterCallback(void *rowCounterPointer,
     
     if (sqlite3_close(db))
         NSLog(@"DB: close error");
+    
+    //free(title);
+    //free(date);
     
     [cell setDataBaseIndex:index];
     NSLog(@"Index = %d", index);

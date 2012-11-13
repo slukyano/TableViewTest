@@ -9,6 +9,7 @@
 #import "UserDataLoader.h"
 #import "TableViewDataSingleton.h"
 #import "CellData.h"
+#import "Util.h"
 
 @interface UserDataLoader ()
 {
@@ -18,7 +19,7 @@
     BOOL _insideTheTable;
     BOOL _insideTheCell;
     BOOL _insideTheDate;
-    //BOOL _insideTheImage;
+    BOOL _insideTheImage;
 }
 
 @end
@@ -33,7 +34,7 @@
         _insideTheTable = NO;
         _insideTheCell = NO;
         _insideTheDate = NO;
-        //_insideTheImage = NO;
+        _insideTheImage = NO;
         _dataArray = [[NSMutableArray alloc] init];
     }
     
@@ -69,12 +70,12 @@
         else
             [parser abortParsing];
     }
-    /*else if ([elementName isEqualToString:@"image"]) {
+    else if ([elementName isEqualToString:@"image"]) {
         if (_insideTheCell)
             _insideTheImage = YES;
         else
             [parser abortParsing];
-    }*/
+    }
     else
         [parser abortParsing];
 }
@@ -92,21 +93,30 @@
     if ([elementName isEqualToString:@"table"] && _insideTheTable)
         _insideTheTable = NO;
     else if ([elementName isEqualToString:@"cell"] && _insideTheCell) {
-        UIImage* image = [UIImage imageNamed:@"defaultImage.png"];
-        [_tempCell setImage:image];
+        if (_tempCell.image == nil) {
+            UIImage* image = [UIImage imageNamed:@"defaultImage.png"];
+            [_tempCell setImage:image];
+        }
         [_dataArray addObject:_tempCell];
         [_tempCell release];
         
         _insideTheCell = NO;
     }
     else if ([elementName isEqualToString:@"date"] && _insideTheDate) {
-        NSDate *newDate = [TableViewDataSingleton dateFromString:_tempString];
-        [_tempCell setDate:newDate];
+        NSDate *date = [TableViewDataSingleton dateFromString:_tempString];
+        [_tempCell setDate:date];
         
         _insideTheDate = NO;
     }
-    /*else if ([elementName isEqualToString:@"image"] && _insideTheImage)
-        _insideTheImage = NO;*/
+    else if ([elementName isEqualToString:@"image"] && _insideTheImage) {
+        //NSData *imageData = UTILDataFromBase64String(_tempString);
+        //NSLog(_tempString);
+        //UIImage *image = [UIImage imageWithData:imageData];
+        //if (image == nil) NSLog(@"image is nil!");
+        //[_tempCell setImage:image];
+        
+        _insideTheImage = NO;
+    }
     else
         [parser abortParsing];
     

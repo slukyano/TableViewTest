@@ -203,9 +203,13 @@ static TableViewDataSingleton *_instance;
     for (int i = 0; i < [_instance.dataArray count]; i++) {
         CellData *currentCell = [_instance.dataArray objectAtIndex:i];
         
-        NSString *dateString = [TableViewDataSingleton stringFromDate:currentCell.date];
         xmlString = [xmlString stringByAppendingFormat:@"<cell title=\"%@\">\n", currentCell.title];
+        
+        NSString *dateString = [TableViewDataSingleton stringFromDate:currentCell.date];
         xmlString = [xmlString stringByAppendingFormat:@"<date>%@</date>\n", dateString];
+        
+        //NSData *imageData = UIImagePNGRepresentation(currentCell.image);
+        //xmlString = [xmlString stringByAppendingFormat:@"<image>%@</image>\n", imageString];
         
         xmlString = [xmlString stringByAppendingFormat:@"</cell>"];
     }
@@ -229,6 +233,7 @@ static TableViewDataSingleton *_instance;
     BOOL success = [xmlParser parse];
     
     [dataLoader release];
+    [xmlParser release];
     
     return success;
 }
