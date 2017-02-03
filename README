@@ -1,1 +1,5 @@
-DevSchool
+Simple TableView-based iOS app
+==============================
+
+An assignment for the Digital Design's Developer School.
+A simple iOS app that manages record-based data with frontend using UITableView, and backend based on stream-based XML parsing (NSXMLParser), DOM-based XML parsing (Google Data), or SQL (sqlite).
